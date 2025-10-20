@@ -21,6 +21,7 @@ public class Product {
 
     private Double price;
 
+    //Jpa por padrão converte nomes de campos que estão em camel case para snakecase
     private String imgUrl;
 
     @ManyToMany
