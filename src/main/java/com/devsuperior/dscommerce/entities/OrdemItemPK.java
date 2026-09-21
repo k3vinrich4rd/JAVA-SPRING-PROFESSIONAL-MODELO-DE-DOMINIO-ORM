@@ -7,9 +7,15 @@ import jakarta.persistence.ManyToOne;
 import java.util.Objects;
 
 
-@Embeddable
+@Embeddable // Indica que a classe OrdemItemPK é uma classe incorporável,
+// ou seja, seus atributos podem ser incorporados em outras entidades.
+// Isso é útil para criar chaves compostas em entidades JPA.
+// Chave primiraria composta é uma chave primária que consiste em mais de um atributo.
+//No caso da classe OrdemItemPK, ela representa a chave primária composta da entidade
+// OrdemItem, que é formada pelos atributos order e product.
 public class OrdemItemPK {
 
+    //Dois manyToOne, pois cada OrdemItem está associado a um Order e a um Product.
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

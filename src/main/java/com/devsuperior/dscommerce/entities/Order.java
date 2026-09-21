@@ -33,7 +33,8 @@ public class Order {
     @JoinColumn(name = "payment_id")
     private Payment payment;
 
-    @OneToMany(mappedBy = "id.order")
+    @OneToMany(mappedBy = "id.order") // Indica que a relação entre Order e OrdemItem é mapeada pelo atributo
+    // "order" da classe OrdemItemPK, que é a chave primária composta da entidade OrdemItem.
     private Set<OrdemItem> items = new HashSet<>();
 
     public Order() {
@@ -93,6 +94,9 @@ public class Order {
         return items;
     }
 
+    // Metodo para retornar uma lista de produtos do pedido
+    // Ele percorre a lista de itens do pedido e retorna uma lista de produtos associados a cada item.
+    // Ele utiliza o método map() para transformar cada item em um produto e o método toList() para coletar os produtos em uma lista.
     public List<Product> getProducts() {
         return items.stream().map(x -> x.getProduct()).toList();
 

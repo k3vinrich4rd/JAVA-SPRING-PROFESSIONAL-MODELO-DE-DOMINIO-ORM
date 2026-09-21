@@ -10,8 +10,8 @@ import java.util.Objects;
 @Table(name = "tb_order_item")
 public class OrdemItem {
 
-    @EmbeddedId
-    private OrdemItemPK id = new OrdemItemPK();
+    @EmbeddedId // Indica que a classe OrdemItem possui uma chave primária composta, que é representada pela classe OrdemItemPK.
+    private final OrdemItemPK id = new OrdemItemPK();
     private Integer quantity;
     private Double price;
 

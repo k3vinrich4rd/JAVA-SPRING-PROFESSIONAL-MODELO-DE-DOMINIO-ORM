@@ -31,7 +31,8 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private final Set<Category> categories = new HashSet<>();
 
-    @OneToMany(mappedBy = "id.product")
+    @OneToMany(mappedBy = "id.product") // Indica que a relação entre Product e OrdemItem é mapeada pelo atributo
+    // "product" da classe OrdemItemPK, que é a chave primária composta da entidade OrdemItem.
     private final Set<OrdemItem> items = new HashSet<>();
 
     public Product() {
@@ -95,7 +96,9 @@ public class Product {
     }
 
     public List<Order> getOrders() {
-        return items.stream().map(x -> x.getOrder()).toList();
+        // Retorna uma lista de pedidos associados a este produto, obtida a partir dos itens de pedido (OrdemItem) relacionados a este produto.
+        //Outra forma de implementar utilizando o map e method reference com toList() para coletar os pedidos em uma lista.
+        return items.stream().map(OrdemItem::getOrder).toList();
     }
 
     @Override
