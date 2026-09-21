@@ -17,7 +17,7 @@ public class Product {
 
     private String name;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT") // Permite que o campo description seja armazenado como um tipo de dado TEXT no banco de dados, permitindo armazenar textos longos.
     private String description;
 
     private Double price;
@@ -29,10 +29,10 @@ public class Product {
     @JoinTable(name = "tb_product_category",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
+    private final Set<Category> categories = new HashSet<>();
 
     @OneToMany(mappedBy = "id.product")
-    private Set<OrdemItem> items = new HashSet<>();
+    private final Set<OrdemItem> items = new HashSet<>();
 
     public Product() {
 

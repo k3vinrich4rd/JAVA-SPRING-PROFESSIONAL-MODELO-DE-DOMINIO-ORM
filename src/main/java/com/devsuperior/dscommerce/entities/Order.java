@@ -17,7 +17,10 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") // Para que o banco de dados não adicione o fuso horário,
+    // por padrão o PostgreSQL adiciona o fuso horário,
+    // mas o Java não trabalha com fuso horário, então é necessário adicionar essa anotação para que o banco de dados não adicione o fuso horário.
+    //Fuso horário é a diferença de tempo entre dois lugares do mundo, por exemplo, o Brasil está no fuso horário GMT-3, enquanto a Inglaterra está no fuso horário GMT+0.
     private Instant moment;
 
     private OrderStatus status;

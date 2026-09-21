@@ -17,7 +17,8 @@ public class Payment {
     private Instant moment;
 
     @OneToOne
-    @MapsId
+    @MapsId // Para que o id do pagamento seja o mesmo id do pedido, ou seja, o id do pagamento será o mesmo id do pedido, pois um pagamento está associado a um pedido.
+    // pega o id do pedido e coloca no id do pagamento, ou seja, o id do pagamento será o mesmo id do pedido.
     private Order order;
 
     public Payment() {

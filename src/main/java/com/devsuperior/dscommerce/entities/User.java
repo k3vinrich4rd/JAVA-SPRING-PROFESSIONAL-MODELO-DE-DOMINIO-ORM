@@ -16,7 +16,7 @@ public class User {
     private Long id;
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true) // Garante que o campo email seja único no banco de dados, evitando duplicidade de registros com o mesmo email.
     private String email;
 
     private String phone;
@@ -90,10 +90,6 @@ public class User {
 
     public List<Order> getOrders() {
         return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     @Override
