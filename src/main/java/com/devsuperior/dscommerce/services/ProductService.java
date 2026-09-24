@@ -60,8 +60,10 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImgUrl(dto.getImgUrl());
-
     }
 
+    public void delete(Long id) {
+        productRepository.deleteById(id);
+    }
 
 }
