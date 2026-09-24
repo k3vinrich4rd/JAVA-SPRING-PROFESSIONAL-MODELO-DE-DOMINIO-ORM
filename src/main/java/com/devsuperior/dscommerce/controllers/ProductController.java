@@ -5,7 +5,11 @@ import com.devsuperior.dscommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 // Indica que a classe é um controlador REST, responsável por lidar com requisições HTTP e retornar respostas no formato JSON.
@@ -18,8 +22,9 @@ public class ProductController {
     // Mapeia o metodo findById para lidar com requisições HTTP GET no endpoint
     //  "/products/{id}", onde {id} é um parâmetro de caminho que representa o ID
     @GetMapping(value = "/{id}")
-    public ProductDto findById(@PathVariable Long id) {
-        return productService.findById(id);
+    public ResponseEntity<ProductDto> findById(@PathVariable Long id) {
+        ProductDto dto = productService.findById(id);
+        return ResponseEntity.ok(dto);
 
     }
 
@@ -29,15 +34,24 @@ public class ProductController {
     //Metodo findAll com paginação, mapeado para lidar com
     // requisições HTTP GET no endpoint "/products", retornando uma página de ProductDto.
     @GetMapping()
-    public Page<ProductDto> findAll(Pageable pageable) {
-        return productService.findAll(pageable);
+    public ResponseEntity<Page<ProductDto>> findAll(Pageable pageable) {
+        Page<ProductDto> dto = productService.findAll(pageable);
+        return ResponseEntity.ok(dto);
 
     }
 
     @PostMapping
-    public ProductDto insert(@RequestBody ProductDto dto) {
-        return productService.insert(dto);
+    public ResponseEntity<ProductDto> insert(@RequestBody ProductDto dto) {
+        dto = productService.insert(dto);
+        // Cria um URI para o recurso recém-criado, utilizando o ID do DTO retornado pelo serviço.
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 
-
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<ProductDto> update(@PathVariable Long id, @RequestBody ProductDto dto) {
+        dto = productService.update(id, dto);
+        return ResponseEntity.ok(dto);
+    }
 }
