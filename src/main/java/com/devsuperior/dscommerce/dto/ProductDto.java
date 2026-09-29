@@ -18,6 +18,10 @@ public class ProductDto {
         this.imgUrl = imgUrl;
     }
 
+    public ProductDto() {
+
+    }
+
     // Construtor que recebe uma entidade Product e inicializa os atributos do DTO com os valores correspondentes da entidade.
     public ProductDto(Product entity) {
         this.id = entity.getId();

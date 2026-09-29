@@ -3,11 +3,15 @@ package com.devsuperior.dscommerce.services;
 import com.devsuperior.dscommerce.dto.ProductDto;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
+import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
 import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -51,9 +55,14 @@ public class ProductService {
     public ProductDto update(Long id, ProductDto dto) {
         // Busca a entidade Product correspondente ao ID fornecido no repositório.
         //getReferenceById(id) é usado para obter uma referência à entidade sem carregá-la completamente do banco de dados.
-        Product entity = productRepository.getReferenceById(id);
-        copyDtoEntity(dto, entity);
-        return new ProductDto(entity);
+        try {
+            Product entity = productRepository.getReferenceById(id);
+            copyDtoEntity(dto, entity);
+            entity = productRepository.save(entity);
+            return new ProductDto(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado! Id: " + id + ", Tipo: " + Product.class.getName());
+        }
     }
 
     // O metodo copyDtoEntity é um metodo auxiliar que copia os valores dos atributos do DTO para a entidade Product.
@@ -64,8 +73,18 @@ public class ProductService {
         entity.setImgUrl(dto.getImgUrl());
     }
 
-    public void delete(Long id) {
-        productRepository.deleteById(id);
+    //propagation = Propagation.Supports indica que o metodo delete pode ser executado
+    // em uma transação existente, se houver uma, ou criar uma nova transação se não houver.
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) throws DatabaseException {
+        if (!productRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Recurso não encontrado! Id: " + id + ", Tipo: " + Product.class.getName());
+        }
+        try {
+            productRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
+        }
     }
 
 }
