@@ -18,7 +18,7 @@ import java.net.URI;
 public class ProductController {
 
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     // Mapeia o metodo findById para lidar com requisições HTTP GET no endpoint
     //  "/products/{id}", onde {id} é um parâmetro de caminho que representa o ID
@@ -44,7 +44,9 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<ProductDto> insert(@Valid @RequestBody ProductDto dto) {
         dto = productService.insert(dto);
-        // Cria um URI para o recurso recém-criado, utilizando o ID do DTO retornado pelo serviço.
+        // Cria um URI p    ara o recurso recém-criado, utilizando o ID do DTO retornado pelo serviço.
+        // O URI seria algo como "/products/{id}", onde {id} é o ID do produto recém-criado.
+        // URI é o Uniform Resource Identifier, que representa o endereço do recurso recém-criado.
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
         return ResponseEntity.created(uri).body(dto);

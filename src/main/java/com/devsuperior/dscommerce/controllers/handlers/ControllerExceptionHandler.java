@@ -43,6 +43,11 @@ public class ControllerExceptionHandler {
         // Isso permite que o objeto ValidationError contenha informações detalhadas sobre os erros de validação ocorridos durante o processamento da requisição.
         //fieldError.getField() retorna o nome do campo que gerou o erro de validação.
         //fieldError.getDefaultMessage() retorna a mensagem de erro associada ao campo.
+        //FieldError é uma classe do Spring que representa um erro de validação em um campo específico de um objeto.
+        //FieldError é usado para capturar informações sobre erros de validação em campos individuais,
+        // como o nome do campo e a mensagem de erro associada.
+        // Ele capitura atraves da exceção MethodArgumentNotValidException, que é lançada quando
+        // há erros de validação em argumentos de métodos anotados com @Valid.
         for (FieldError fieldError: e.getBindingResult().getFieldErrors()) {
             err.addError(fieldError.getField(), fieldError.getDefaultMessage());
         }
